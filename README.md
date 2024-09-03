@@ -51,7 +51,7 @@ ___
 Now, let's go through what we have explored so far.  
 Firstly, we should create an account on [Puhser.com](https://pusher.com), where we will be provided with: `key`, `app_id`, `secret`, and `cluster`.  
 The `SimpleNoti` class is a singleton, that can be instantiated with `init()`. Then you need to initialize it with a number of configuration options, here is a quick example with a number of callbacks options:  
-```
+```dart
   await SimpleNotifications.init(
     onTap: onTap,
     appKey: YOUR_KEY,
@@ -65,7 +65,7 @@ The `SimpleNoti` class is a singleton, that can be instantiated with `init()`. T
 `enableLogging` is a flag that decides whether you want to include the log messages in your terminal or not, it provides useful messages that help you knowing the current state of your app.  
 #### 〰️ Subscribtion  
 After that, you should subscribe to a channel in order to start listening to the events  
-```
+```dart
 await SimpleNotifications.subscribe(
         channelName: 'chat',
         roomId: 0,
@@ -75,7 +75,7 @@ the `roomId` is an optional paramter, if it is not provided, the subscribtion wo
 You may override `onEvent` method in `SimpleNotifications.subscribe()`, by default it displays a notification on the screen whenever an event is recieved.  
 #### 📨 Send a remote notification  
 You may send a notification using:  
-```
+```dart
 await SimpleNotifications.sendNotifications(
         channelName: 'chat',
         roomId: 0,
@@ -87,7 +87,7 @@ await SimpleNotifications.sendNotifications(
 where `title` is the title of the notification that is going to be sent, `message` is the the message that is going to be included in the body of the notification, and `payload` is additional paramter if you want to include a specific data in the event that is going to be triggered.  
 #### 📩 Send a local notification  
 You may also send a local notification using
-```
+```dart
 await SimpleNotifications.showNotifications(
         title: 'some title',
         message: 'your body message',
@@ -95,7 +95,7 @@ await SimpleNotifications.showNotifications(
 ```  
 #### 🚫 Unsubscribtion and closing the connection  
 After you have finished with the channel, do not forget to unsubcribe and close the connection in order to free the resources  
-```
+```dart
 await SimpleNotifications.unsubscribeAndClose(
         channelName: 'chat',
         roomId: 0,
