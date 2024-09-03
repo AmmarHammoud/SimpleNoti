@@ -1,5 +1,5 @@
 name: simple_noti
-description: "A new Flutter package project."
+description: "A simple package to implement notification with Pusher"
 version: 0.0.1
 homepage: https://github.com/AmmarHammoud/SimpleNoti
 
