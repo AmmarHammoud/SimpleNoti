@@ -54,33 +54,40 @@ abstract class SimpleNotifications {
     _debounceTimer = Timer(const Duration(milliseconds: 300), () async {
       if (event.data == null || event.data.isEmpty) return;
 
-      late Map json;
-      try {
-        json = _decodedEvent(event.data);
-      } catch (e, stackTrace) {
-        logRed('error decoding json: ${e.toString()}');
-        debugPrint(stackTrace.toString());
-      }
-      var title = json['title'];
-      var body = json['message'];
-      if (_enableLogging) {
-        logGreen('Event has been received on channel: {${event.channelName}}');
-        logMagenta(
-            'details: ${event.data.toString()}, run time type: ${event.data.runtimeType}');
-      }
-
-      if (kIsWeb) {
-        _showNotificationOnWeb(title: title, message: body);
-        return;
-      }
-
-      await Noti.showNotification(
-        title: title,
-        body: body,
-        payload: json.toString(),
-        fln: _flutterLocalNotificationsPlugin,
-      );
+      _handleEventAsync(event.data);
     });
+  }
+
+  ///A helper function.
+  ///As [onEvent] in [subscribe] expects an synchronous function,
+  ///we need to wrap the asynchronous part with another helper method
+  static Future<void> _handleEventAsync(String eventData) async {
+    late Map json;
+    try {
+      json = _decodedEvent(eventData);
+    } catch (e, stackTrace) {
+      logRed('error decoding json: ${e.toString()}');
+      debugPrint(stackTrace.toString());
+    }
+    var title = json['title'];
+    var body = json['message'];
+    if (_enableLogging) {
+      logGreen('Event has been received');
+      logMagenta('details: ${eventData.toString()}');
+    }
+
+    if (kIsWeb) {
+      _showNotificationOnWeb(title: title, message: body);
+      return;
+    }
+
+    // This is the await call that caused the issue
+    await Noti.showNotification(
+      title: title,
+      body: body,
+      payload: json.toString(),
+      fln: _flutterLocalNotificationsPlugin,
+    );
   }
 
   ///Initialize the [SimpleNotifications]
@@ -128,7 +135,7 @@ abstract class SimpleNotifications {
   static Future<void> subscribe({
     required String channelName,
     int? roomId,
-    Function(PusherEvent event)? onEvent,
+    Function(dynamic)? onEvent,
   }) async {
     try {
       await _pusher.subscribe(
