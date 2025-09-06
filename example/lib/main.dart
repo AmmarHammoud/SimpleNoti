@@ -159,19 +159,19 @@ class ValidatedTextField extends StatelessWidget {
 
   const ValidatedTextField(
       {super.key,
-      required this.controller,
-      required this.hintText,
-      this.hasNextText = true,
-      this.icon,
-      this.fontSize = 20.0,
-      this.radius = 15.0});
+        required this.controller,
+        required this.hintText,
+        this.hasNextText = true,
+        this.icon,
+        this.fontSize = 20.0,
+        this.radius = 15.0});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       textInputAction:
-          hasNextText ? TextInputAction.next : TextInputAction.done,
+      hasNextText ? TextInputAction.next : TextInputAction.done,
       style: TextStyle(
         fontSize: fontSize,
       ),
