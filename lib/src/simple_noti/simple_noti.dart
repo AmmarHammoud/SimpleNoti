@@ -57,8 +57,9 @@ abstract class SimpleNotifications {
       late Map json;
       try {
         json = _decodedEvent(event.data);
-      } catch (e) {
+      } catch (e, stackTrace) {
         logRed('error decoding json: ${e.toString()}');
+        debugPrint(stackTrace.toString());
       }
       var title = json['title'];
       var body = json['message'];
@@ -117,8 +118,9 @@ abstract class SimpleNotifications {
           onMemberAdded: _onMemberAdded,
           onMemberRemoved: _onMemberRemoved,
           onSubscriptionCount: _onSubscriptionCount);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logRed('Error initializing Pusher: ${e.toString()}');
+      debugPrint(stackTrace.toString());
     }
   }
 
@@ -135,8 +137,9 @@ abstract class SimpleNotifications {
         onEvent: onEvent ?? (e) => _onMyEvent(e),
       );
       await _pusher.connect();
-    } catch (e) {
+    } catch (e, stackTrace) {
       logRed('error subscribing to: {$channelName}: ${e.toString()}');
+      debugPrint(stackTrace.toString());
     }
   }
 
@@ -188,8 +191,9 @@ abstract class SimpleNotifications {
       await _pusher.disconnect();
       if (!_enableLogging) return;
       logGreen('Unsubscribing succeeded');
-    } catch (e) {
+    } catch (e, stackTrace) {
       logRed('Error unsubscribing channel {$channelName}: ${e.toString()}');
+      debugPrint(stackTrace.toString());
     }
   }
 
@@ -214,8 +218,9 @@ abstract class SimpleNotifications {
         payload: jsonEncode(payload),
       );
       logYellow('response: ${response.data}');
-    } catch (e) {
+    } catch (e, stackTrace) {
       logRed('error sending notifications: ${e.toString()}');
+      debugPrint(stackTrace.toString());
     }
   }
 
@@ -268,8 +273,9 @@ abstract class SimpleNotifications {
     try {
       var response = await DioHelper.test(payload: jsonEncode(payload));
       logMagenta('test response ${response.data.toString()}');
-    } catch (e) {
+    } catch (e, stackTrace) {
       logRed(e.toString());
+      debugPrint(stackTrace.toString());
     }
   }
 }
